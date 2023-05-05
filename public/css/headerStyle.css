@@ -1,0 +1,43 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css');
+
+*{
+	font-family: 'Open Sans', 'sans-serif', 'FontAwesome';
+}
+body{
+    background-color: rgb(52, 56, 61);
+}
+
+/* Обнуляем отступы для всех элементов */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Устанавливаем серый цвет фона для всей страницы */
+body {
+    background-color: #f2f2f2;
+}
+
+/* Добавляем стиль для навигации */
+nav {
+    background-color: rgb(52, 56, 61);
+    padding: 10px;
+}
+
+/* Устанавливаем стили для ссылок в навигации */
+nav a {
+    display: inline-block;
+    margin-right: 10px;
+    color: whitesmoke;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px;
+}
+
+/* Устанавливаем стиль для активной ссылки */
+nav a.active {
+    background-color: #333;
+    color: #fff;
+}
+

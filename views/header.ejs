@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Node.js App</title>
+    <link rel="stylesheet" href="./css/headerStyle.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Main Page</a>
+        <% if (session.isAuthenticated) { %>
+            <a href="/logout">Logout</a>
+        <% } else { %>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        <% } %>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+</body>
+</html>
