@@ -15,6 +15,9 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 
 require('dotenv').config();
 
+app.use('/css', express.static(__dirname + '/public/css'));
+app.use('/img/avatars', express.static(__dirname + '/public/img/avatars'));
+
 
 
 
@@ -51,4 +54,9 @@ async function start() {
 
 start();
 
+// Здесь мы проверяем, есть ли заполненные данные, то мы их показываем, а иначе поля будут пустые. 
+// Чтоб код работал, нам необходимо изменить post и get запрос для это страницы следующим образом:
+// get запрос:
+// я остановился на этом.
 
+// https://docs.google.com/document/d/1XV_ewuYqkBz661xaCRGho-AlwLSKHMcFVDMVjTriRrM/edit#
