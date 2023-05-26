@@ -22,7 +22,7 @@ async function register(req, res){
 
     try {
         await user.save();
-        res.send('Successful register');
+        res.redirect('/');
     } catch (err) {
         res.status(500).send('Error from save user in DB');
     }

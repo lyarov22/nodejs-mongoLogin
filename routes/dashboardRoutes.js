@@ -15,12 +15,12 @@ router.get('/',  (req, res) => {
     res.render('dashboard', { session: req.session });
 });
 
-router.get('/user-data', (req, res) => {
+router.get('/user-data', async (req, res) => {
     if (req.session.user.role !== 'admin') {
         return res.redirect('/dashboard');
     }
-
-    res.render('userDataForm', { session: req.session });
+    let userDetails = await UserDetails.findOne({ user: req.session.user._id })
+    res.render('userDataForm', { session: req.session, userDetails: userDetails });
 });
 
 router.get('/profile/:id', async (req, res) => {
@@ -30,7 +30,7 @@ router.get('/profile/:id', async (req, res) => {
         return res.redirect('/dashboard');
     }
 
-    res.render('/userDataForm', { session: req.session, userDetails});
+    res.render('userDataForm', { session: req.session, userDetails});
 });
 
 
@@ -63,6 +63,8 @@ const upload = multer({
       }
 }).single('avatar');
 
+const fs = require('fs');
+
 router.post('/user-data', async (req, res) => {
     if (req.session.user.role !== 'admin') {
         return res.redirect('/dashboard');
@@ -80,16 +82,25 @@ router.post('/user-data', async (req, res) => {
         if (userDetails) {
             userDetails.nickname = req.body.nickname;
             userDetails.about = req.body.about;
+
             if (req.file) {
-                userDetails.avatarUrl = '/img/avatars' + req.file.filename;
+                const oldAvatarPath = userDetails.avatarUrl ? path.join(__dirname, '..', 'public', userDetails.avatarUrl) : null;
+                
+                userDetails.avatarUrl = '/img/avatars/' + req.file.filename;
+            
+                if (oldAvatarPath && fs.existsSync(oldAvatarPath)) {
+                    fs.unlink(oldAvatarPath);
+                }
             }
+
             await userDetails.save();
+
         } else {
             userDetails = new UserDetails({
                 user: req.body.user,
                 nickname: req.body.nickname,
                 about: req.body.about,
-                avatarUrl: req.file ? '/img/avatars' + req.file.filename : null,
+                avatarUrl: req.file ? '/img/avatars/' + req.file.filename : null,
                 user: req.session.user._id,
             });
             await userDetails.save();
@@ -101,6 +112,20 @@ router.post('/user-data', async (req, res) => {
 
     });
 });
+
+router.post('/profile/:id/delete-avatar', async(req, res) => {
+    const userDetails = await UserDetails.findOne({ user: req.params.id });
+
+    if (!userDetails) {
+        const filePath = path.join(__dirname, '..', 'public', userDetails.avatarUrl);
+        fs.unlinkSync(filePath);
+    }
+
+    userDetails.avatarUrl = null;
+    await userDetails.save();
+
+    res.redirect('/dashboards/profile/${req.params.id');
+})
 
 module.exports = router;
 
